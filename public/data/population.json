@@ -1,0 +1,17 @@
+[
+  { "id": 1, "name": "長崎駅周辺", "lat": 32.7501, "lng": 129.8681, "population": 8200, "area_km2": 1.2 },
+  { "id": 2, "name": "浜町・観光通り", "lat": 32.7460, "lng": 129.8770, "population": 12500, "area_km2": 0.9 },
+  { "id": 3, "name": "稲佐・西山", "lat": 32.7620, "lng": 129.8620, "population": 15300, "area_km2": 2.1 },
+  { "id": 4, "name": "茂木・三和", "lat": 32.6980, "lng": 129.9150, "population": 9800, "area_km2": 3.5 },
+  { "id": 5, "name": "時津方面", "lat": 32.8100, "lng": 129.8450, "population": 18700, "area_km2": 4.2 },
+  { "id": 6, "name": "矢上・東長崎", "lat": 32.7900, "lng": 129.9200, "population": 22400, "area_km2": 5.8 },
+  { "id": 7, "name": "滑石・三ツ山", "lat": 32.7800, "lng": 129.8500, "population": 19600, "area_km2": 3.3 },
+  { "id": 8, "name": "深堀・香焼", "lat": 32.6800, "lng": 129.8600, "population": 7200, "area_km2": 4.1 },
+  { "id": 9, "name": "南長崎・上長崎", "lat": 32.7350, "lng": 129.8900, "population": 14100, "area_km2": 2.4 },
+  { "id": 10, "name": "西彼杵（長与方面）", "lat": 32.8300, "lng": 129.8700, "population": 25600, "area_km2": 6.7 },
+  { "id": 11, "name": "昭和・戸町", "lat": 32.7200, "lng": 129.8700, "population": 16800, "area_km2": 2.8 },
+  { "id": 12, "name": "三菱・幸町", "lat": 32.7580, "lng": 129.8600, "population": 11200, "area_km2": 1.5 },
+  { "id": 13, "name": "出島周辺", "lat": 32.7434, "lng": 129.8720, "population": 6400, "area_km2": 0.7 },
+  { "id": 14, "name": "丸尾・本原", "lat": 32.7700, "lng": 129.8780, "population": 17900, "area_km2": 3.0 },
+  { "id": 15, "name": "宿町・田上", "lat": 32.7650, "lng": 129.9000, "population": 13500, "area_km2": 2.6 }
+]

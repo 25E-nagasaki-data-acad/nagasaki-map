@@ -1,0 +1,593 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-05-05T14:13:13Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 1126453080,
+  "lat": 32.7512393,
+  "lon": 129.8709899,
+  "tags": {
+    "brand": "西友",
+    "brand:en": "Seiyu",
+    "brand:ja": "西友",
+    "brand:wikidata": "Q3108542",
+    "name": "西友",
+    "name:en": "Seiyu",
+    "name:ja": "西友",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 1789806381,
+  "lat": 33.0451709,
+  "lon": 129.7436379,
+  "tags": {
+    "int_name": "Ellena Saikai",
+    "name": "エレナ西海店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 1852846476,
+  "lat": 32.7889199,
+  "lon": 129.7894810,
+  "tags": {
+    "name": "磯店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 1949259684,
+  "lat": 32.7903017,
+  "lon": 129.8615991,
+  "tags": {
+    "name": "チトセピア",
+    "name:en": "Chitosepia",
+    "name:ja": "チトセピア",
+    "shop": "supermarket",
+    "source": "Knowledge",
+    "website": "http://www.chitosepia.com/",
+    "wikidata": "Q11317965"
+  }
+},
+{
+  "type": "node",
+  "id": 1962612754,
+  "lat": 32.9186809,
+  "lon": 129.6648317,
+  "tags": {
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2110812585,
+  "lat": 33.0707396,
+  "lon": 129.8592772,
+  "tags": {
+    "name": "エレナ川棚店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2134847534,
+  "lat": 32.9016603,
+  "lon": 129.9545171,
+  "tags": {
+    "name": "イオン大村ショッピングセンター",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2140866349,
+  "lat": 32.6850156,
+  "lon": 129.8349765,
+  "tags": {
+    "name": "Ellena",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2155381801,
+  "lat": 32.7595756,
+  "lon": 129.9447815,
+  "tags": {
+    "name": "Ellena",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2155382261,
+  "lat": 32.7682182,
+  "lon": 129.9524255,
+  "tags": {
+    "addr:city": "長崎市",
+    "addr:province": "長崎県",
+    "addr:quarter": "田中町",
+    "branch": "東長崎店",
+    "brand": "イオン",
+    "brand:en": "AEON",
+    "brand:ja": "イオン",
+    "brand:wikidata": "Q11285951",
+    "brand:wikipedia": "ja:イオン (店舗ブランド)",
+    "name": "イオン",
+    "name:en": "AEON",
+    "name:ja": "イオン",
+    "name:ja_rm": "Ion",
+    "operator": "イオン九州",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2806757554,
+  "lat": 32.7409936,
+  "lon": 129.8942856,
+  "tags": {
+    "name": "まるたか生鮮市場",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3242837697,
+  "lat": 32.9355341,
+  "lon": 129.9474953,
+  "tags": {
+    "addr:city": "大村市",
+    "name": "かとりストア",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3242837698,
+  "lat": 32.9283302,
+  "lon": 129.9428068,
+  "tags": {
+    "addr:city": "大村市",
+    "name": "マックスバリュ空港通店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3242876769,
+  "lat": 32.9437099,
+  "lon": 129.9411793,
+  "tags": {
+    "name": "ララコープ富の原",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3242891536,
+  "lat": 32.9444909,
+  "lon": 129.9484674,
+  "tags": {
+    "name": "エレナ竹松店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3244666893,
+  "lat": 32.9092202,
+  "lon": 129.9599349,
+  "tags": {
+    "addr:city": "大村市",
+    "name": "コレモおおむら",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3244670345,
+  "lat": 32.9120202,
+  "lon": 129.9524306,
+  "tags": {
+    "name": "エレナ",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3246183111,
+  "lat": 32.9350945,
+  "lon": 129.9635219,
+  "tags": {
+    "addr:city": "大村市",
+    "name": "まるたか池田店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3246189370,
+  "lat": 32.9210267,
+  "lon": 129.9665712,
+  "tags": {
+    "name": "マックスバリュ諏訪店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3276982959,
+  "lat": 32.9230980,
+  "lon": 129.9504350,
+  "tags": {
+    "name": "エレナ",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3276995637,
+  "lat": 32.8986709,
+  "lon": 129.9744569,
+  "tags": {
+    "name": "ダイレックス木場店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3312120360,
+  "lat": 32.6600527,
+  "lon": 129.8353960,
+  "tags": {
+    "name": "Ellena",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3342261563,
+  "lat": 32.9433542,
+  "lon": 129.9364768,
+  "tags": {
+    "name": "まるたか富の原店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 3828530358,
+  "lat": 32.7428229,
+  "lon": 129.8762719,
+  "tags": {
+    "brand": "イオン",
+    "brand:en": "AEON",
+    "brand:ja": "イオン",
+    "brand:wikidata": "Q11285951",
+    "brand:wikipedia": "ja:イオン (店舗ブランド)",
+    "name": "イオン",
+    "name:en": "AEON",
+    "name:ja": "イオン",
+    "name:ja_rm": "Ion",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 4423183795,
+  "lat": 33.0726681,
+  "lon": 129.7603339,
+  "tags": {
+    "name": "セブンイレブン　針尾店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 4814858024,
+  "lat": 32.7415425,
+  "lon": 129.8741008,
+  "tags": {
+    "brand": "イオン",
+    "brand:en": "AEON",
+    "brand:ja": "イオン",
+    "brand:wikidata": "Q11285951",
+    "brand:wikipedia": "ja:イオン (店舗ブランド)",
+    "name": "イオン",
+    "name:en": "AEON",
+    "name:ja": "イオン",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5000875221,
+  "lat": 32.5098001,
+  "lon": 130.0531981,
+  "tags": {
+    "name": "Seaple supermarket",
+    "name:ja": "Seaple supermarket",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5365773242,
+  "lat": 32.7065365,
+  "lon": 129.9108884,
+  "tags": {
+    "name": "S-mart",
+    "name:ja": "Sマート",
+    "opening_hours": "Mo-Su 09:00-21:00",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5695580844,
+  "lat": 32.8091658,
+  "lon": 129.8790239,
+  "tags": {
+    "addr:city": "長与町",
+    "addr:county": "西彼杵郡",
+    "addr:province": "長崎県",
+    "addr:suburb": "吉無田郷",
+    "name": "大門",
+    "opening_hours": "Mo-Su 09:00-21:00",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5725156073,
+  "lat": 32.8507153,
+  "lon": 129.8248050,
+  "tags": {
+    "name": "コメリパワー 時津店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5725156075,
+  "lat": 32.8497529,
+  "lon": 129.8301466,
+  "tags": {
+    "name": "ホームプラザナフコ 時津店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5725156079,
+  "lat": 32.8527857,
+  "lon": 129.8262036,
+  "tags": {
+    "name": "ダイレックス 時津店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5725156082,
+  "lat": 32.8516463,
+  "lon": 129.8275284,
+  "tags": {
+    "name": "マックスバリュ 時津店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5725156084,
+  "lat": 32.8490970,
+  "lon": 129.8274135,
+  "tags": {
+    "name": "ドラッグコスモス 時津店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5725510003,
+  "lat": 32.8461151,
+  "lon": 129.8341030,
+  "tags": {
+    "name": "スーパーセンタートライアル時津店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5728571318,
+  "lat": 32.8318387,
+  "lon": 129.8450430,
+  "tags": {
+    "name": "マルキョウ 時津店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5728571425,
+  "lat": 32.8337352,
+  "lon": 129.8455525,
+  "tags": {
+    "name": "エレナ 時津店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5737845261,
+  "lat": 32.8459357,
+  "lon": 130.0250391,
+  "tags": {
+    "name": "Aコープ",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5737875355,
+  "lat": 32.7139441,
+  "lon": 129.8685046,
+  "tags": {
+    "name": "ダイレックス長崎店",
+    "opening_hours": "Mo-Su 08:00-22:00",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5840135385,
+  "lat": 32.7759010,
+  "lon": 129.8661455,
+  "tags": {
+    "name": "aeon",
+    "name:en": "AEON Joyful Sun",
+    "name:ja": "aeon",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5840135785,
+  "lat": 32.7683649,
+  "lon": 129.8522015,
+  "tags": {
+    "name:en": "Mr Max",
+    "name:ja": "Ｍｒ．ＭＡＸ",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 6144564439,
+  "lat": 32.8538006,
+  "lon": 130.0687045,
+  "tags": {
+    "name": "ダイレックス　東諫早店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 6144564440,
+  "lat": 32.8538457,
+  "lon": 130.0681573,
+  "tags": {
+    "name": "ディスカウントドラッグコスモス東諌早店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 6380331923,
+  "lat": 32.7685096,
+  "lon": 129.8660748,
+  "tags": {
+    "name": "浜口食彩館",
+    "name:en": "Food Center",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 6380332539,
+  "lat": 32.7661758,
+  "lon": 129.8649676,
+  "tags": {
+    "name": "Daily",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 7004066886,
+  "lat": 32.8304348,
+  "lon": 130.0821883,
+  "tags": {
+    "addr:housenumber": "1690-8",
+    "addr:postcode": "8540036",
+    "name": "スーパーセンタートライアル諫早店",
+    "opening_hours": "24/7",
+    "phone": "0957356600",
+    "shop": "supermarket",
+    "website": "http://trial-net.co.jp"
+  }
+},
+{
+  "type": "node",
+  "id": 7361963905,
+  "lat": 32.7916165,
+  "lon": 129.8594376,
+  "tags": {
+    "name": "ジョイフルサン住吉店",
+    "opening_hours": "Mo-Su 09:00-24:00",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 7361963934,
+  "lat": 32.8038297,
+  "lon": 129.8506455,
+  "tags": {
+    "name": "西友　道ノ尾店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 7400836217,
+  "lat": 32.7838389,
+  "lon": 129.8605499,
+  "tags": {
+    "name": "まるたか生鮮市場　西町店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 7818388339,
+  "lat": 32.9238416,
+  "lon": 129.9478095,
+  "tags": {
+    "name": "スーパーセンター トライアル 大村店",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 8682045244,
+  "lat": 32.6842535,
+  "lon": 129.8345410,
+  "tags": {
+    "name": "フレスポ",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 12460822370,
+  "lat": 32.9277606,
+  "lon": 129.9509777,
+  "tags": {
+    "shop": "supermarket"
+  }
+}
+
+  ]
+}
