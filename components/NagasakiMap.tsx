@@ -108,25 +108,25 @@ export default function NagasakiMap() {
 
   useEffect(() => {
     // 市境界GeoJSONの読み込み
-    fetch("/data/nagasaki-city.geojson")
+    fetch(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/nagasaki-city.geojson`)
       .then((r) => r.json())
       .then(setCityBoundary)
       .catch(console.error);
 
     // スーパーマーケットデータの読み込み（OSM）
-    fetch("/data/supermarkets2.json")
+    fetch(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/supermarkets2.json`)
       .then((r) => r.json())
       .then((d) => setSupermarkets(d.elements ?? []))
       .catch(console.error);
 
     // 小売店データの読み込み（拡張）
-    fetch("/data/retail_stores_nagasaki.json")
+    fetch(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/retail_stores_nagasaki.json`)
       .then((r) => r.json())
       .then(setRetailStores)
       .catch(console.error);
 
     // 人口統計データの読み込み
-    fetch("/data/population.json")
+    fetch(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/population.json`)
       .then((r) => r.json())
       .then(setPopulation)
       .catch(console.error);
