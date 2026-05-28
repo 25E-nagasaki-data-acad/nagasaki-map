@@ -5,12 +5,12 @@ import { useMap } from "react-leaflet";
 import L from "leaflet";
 
 const legendItems = [
-  { color: "#084594", label: "22,001人以上" },
-  { color: "#2171b5", label: "18,001〜22,000人" },
-  { color: "#4292c6", label: "14,001〜18,000人" },
-  { color: "#6baed6", label: "10,001〜14,000人" },
-  { color: "#9ecae1", label: "7,001〜10,000人" },
-  { color: "#c6dbef", label: "7,000人以下" },
+  { color: "#084594", label: "1,001人以上" },
+  { color: "#2171b5", label: "701〜1,000人" },
+  { color: "#4292c6", label: "501〜700人" },
+  { color: "#6baed6", label: "301〜500人" },
+  { color: "#9ecae1", label: "101〜300人" },
+  { color: "#c6dbef", label: "100人以下" },
 ];
 
 export default function MapLegend() {
@@ -31,7 +31,7 @@ export default function MapLegend() {
           font-family: sans-serif;
           min-width: 160px;
         ">
-          <div style="font-weight: bold; margin-bottom: 8px; font-size: 13px;">📊 地区別人口</div>
+          <div style="font-weight: bold; margin-bottom: 8px; font-size: 13px;">📊 65歳以上人口</div>
           ${legendItems
             .map(
               (item) => `
