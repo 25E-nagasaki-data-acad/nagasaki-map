@@ -4,20 +4,38 @@ import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 import L from "leaflet";
 
-const legendItems = [
-  { color: "#084594", label: "22,001人以上" },
-  { color: "#2171b5", label: "18,001〜22,000人" },
-  { color: "#4292c6", label: "14,001〜18,000人" },
-  { color: "#6baed6", label: "10,001〜14,000人" },
-  { color: "#9ecae1", label: "7,001〜10,000人" },
-  { color: "#c6dbef", label: "7,000人以下" },
+const populationLegendItems = [
+  { color: "#084594", label: "1,001人以上" },
+  { color: "#2171b5", label: "701〜1,000人" },
+  { color: "#4292c6", label: "501〜700人" },
+  { color: "#6baed6", label: "301〜500人" },
+  { color: "#9ecae1", label: "101〜300人" },
+  { color: "#c6dbef", label: "100人以下" },
 ];
 
-export default function MapLegend() {
+const agingRateLegendItems = [
+  { color: "#4a0000", label: "60%以上" },
+  { color: "#7f0000", label: "55〜60%" },
+  { color: "#b30000", label: "50〜55%" },
+  { color: "#d7301f", label: "45〜50%" },
+  { color: "#ef6548", label: "40〜45%" },
+  { color: "#fc8d59", label: "35〜40%" },
+  { color: "#fdbb84", label: "30〜35%" },
+  { color: "#fef0d9", label: "30%未満" },
+];
+
+interface MapLegendProps {
+  mode: "none" | "population" | "aging_rate";
+}
+
+export default function MapLegend({ mode }: MapLegendProps) {
   const map = useMap();
 
   useEffect(() => {
     const legend = new L.Control({ position: "bottomright" });
+
+    const items = mode === "aging_rate" ? agingRateLegendItems : populationLegendItems;
+    const header = mode === "aging_rate" ? "📊 高齢化率（65歳以上割合）" : "📊 65歳以上人口";
 
     legend.onAdd = () => {
       const div = L.DomUtil.create("div", "map-legend");
@@ -31,8 +49,9 @@ export default function MapLegend() {
           font-family: sans-serif;
           min-width: 160px;
         ">
-          <div style="font-weight: bold; margin-bottom: 8px; font-size: 13px;">📊 地区別人口</div>
-          ${legendItems
+          ${mode !== "none" ? `
+          <div style="font-weight: bold; margin-bottom: 8px; font-size: 13px;">${header}</div>
+          ${items
             .map(
               (item) => `
             <div style="display: flex; align-items: center; margin-bottom: 4px;">
@@ -57,7 +76,7 @@ export default function MapLegend() {
             padding-top: 8px;
             border-top: 1px solid #e5e7eb;
             font-size: 11px;
-          ">
+          ">` : `<div style="font-size: 11px;">`}
             <div style="display: flex; align-items: center; margin-bottom: 3px;">
               <span style="
                 display: inline-block;
@@ -83,15 +102,6 @@ export default function MapLegend() {
               <span style="color: #374151;">長崎市境界</span>
             </div>
           </div>
-          <div style="
-            margin-top: 8px;
-            padding-top: 6px;
-            border-top: 1px solid #e5e7eb;
-            font-size: 10px;
-            color: #9ca3af;
-          ">
-            ※円の大きさは人口に比例
-          </div>
         </div>
       `;
       return div;
@@ -102,7 +112,7 @@ export default function MapLegend() {
     return () => {
       legend.remove();
     };
-  }, [map]);
+  }, [map, mode]);
 
   return null;
 }
