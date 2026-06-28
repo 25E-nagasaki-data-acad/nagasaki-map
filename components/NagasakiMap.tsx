@@ -12,7 +12,7 @@ import {
   Tooltip,
   useMap,
 } from "react-leaflet";
-import type { Feature, GeoJsonObject } from "geojson";
+import type { Feature, GeoJsonObject, FeatureCollection, Point } from "geojson";
 import type { PathOptions, Layer, Path } from "leaflet";
 import L from "leaflet";
 import MapLegend from "./MapLegend";
@@ -86,6 +86,18 @@ function getPopulationColor(population: number): string {
   return "#c6dbef";
 }
 
+// 高齢化率（65歳以上割合 %）に応じた色を返す
+function getAgingRateColor(rate: number): string {
+  if (rate >= 60) return "#4a0000";
+  if (rate >= 55) return "#7f0000";
+  if (rate >= 50) return "#b30000";
+  if (rate >= 45) return "#d7301f";
+  if (rate >= 40) return "#ef6548";
+  if (rate >= 35) return "#fc8d59";
+  if (rate >= 30) return "#fdbb84";
+  return "#fef0d9";
+}
+
 function MapPanes() {
   const map = useMap();
 
@@ -99,6 +111,11 @@ function MapPanes() {
       const storePane = map.createPane("storePane");
       storePane.style.zIndex = "650";
       storePane.style.pointerEvents = "auto";
+    }
+    if (!map.getPane("busStopPane")) {
+      const busStopPane = map.createPane("busStopPane");
+      busStopPane.style.zIndex = "640";
+      busStopPane.style.pointerEvents = "auto";
     }
 
     const tooltipPane = map.getPane("tooltipPane");
@@ -120,9 +137,11 @@ function MapPanes() {
 function TownLayer({
   data,
   visible,
+  colorMode,
 }: {
   data: GeoJsonObject | null;
   visible: boolean;
+  colorMode: "population" | "aging_rate";
 }) {
   const map = useMap();
   const layerRef = useRef<L.GeoJSON | null>(null);
@@ -135,11 +154,13 @@ function TownLayer({
     const geoLayer = L.geoJSON(data, {
       pane: "townPane",
       style: (feature) => {
-        const pop =
-          (feature?.properties as Record<string, number>)
-            ?.population_age_65_and_over ?? 0;
+        const props = (feature?.properties as Record<string, number>) ?? {};
+        const fillColor =
+          colorMode === "aging_rate"
+            ? getAgingRateColor(props.aging_rate ?? 0)
+            : getPopulationColor(props.population_age_65_and_over ?? 0);
         return {
-          fillColor: getPopulationColor(pop),
+          fillColor,
           fillOpacity: 0.55,
           color: "#ffffff",
           weight: 0.8,
@@ -149,11 +170,19 @@ function TownLayer({
         const props = feature.properties as {
           town_name: string;
           population_age_65_and_over: number;
+          total_population: number;
+          aging_rate: number;
         };
-        const baseColor = getPopulationColor(props.population_age_65_and_over);
-        const detailHtml =
-          `<strong>${props.town_name}</strong><br/>` +
-          `65歳以上人口: ${props.population_age_65_and_over.toLocaleString()} 人`;
+        const baseColor =
+          colorMode === "aging_rate"
+            ? getAgingRateColor(props.aging_rate ?? 0)
+            : getPopulationColor(props.population_age_65_and_over ?? 0);
+
+        const popupDetail =
+          colorMode === "aging_rate"
+            ? `<span style="font-size:12px">高齢化率: <strong>${(props.aging_rate ?? 0).toFixed(1)}</strong>%</span><br/>` +
+              `<span style="font-size:12px">65歳以上: ${(props.population_age_65_and_over ?? 0).toLocaleString()} 人 / 総人口: ${(props.total_population ?? 0).toLocaleString()} 人</span>`
+            : `<span style="font-size:12px">65歳以上人口: <strong>${(props.population_age_65_and_over ?? 0).toLocaleString()}</strong> 人</span>`;
 
         layer.on("mouseover", (e: L.LeafletMouseEvent) => {
           (layer as L.Path).setStyle({
@@ -174,8 +203,7 @@ function TownLayer({
           popup
             .setLatLng(e.latlng)
             .setContent(
-              `<strong style="font-size:13px">${props.town_name}</strong><br/>` +
-                `<span style="font-size:12px">65歳以上人口: <strong>${props.population_age_65_and_over.toLocaleString()}</strong> 人</span>`
+              `<strong style="font-size:13px">${props.town_name}</strong><br/>` + popupDetail
             )
             .openOn(map);
         });
@@ -191,7 +219,7 @@ function TownLayer({
       layerRef.current = null;
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, data]);
+  }, [map, data, colorMode]);
 
   // 表示/非表示の切り替え
   useEffect(() => {
@@ -208,13 +236,66 @@ function TownLayer({
 }
 // -----------------------------------------------------------------------
 
+// ---- バス停レイヤー（GeoJSON を Leaflet で直接描画）----
+function BusStopLayer({
+  data,
+}: {
+  data: FeatureCollection | null;
+}) {
+  const map = useMap();
+  const layerRef = useRef<L.GeoJSON | null>(null);
+
+  useEffect(() => {
+    if (!data) return;
+
+    const tooltip = L.tooltip({ direction: "top", offset: L.point(0, -5) });
+
+    const geoLayer = L.geoJSON(data, {
+      pane: "busStopPane",
+      pointToLayer: (_feature, latlng) =>
+        L.circleMarker(latlng, {
+          pane: "busStopPane",
+          radius: 5,
+          fillColor: "#3b82f6",
+          fillOpacity: 0.85,
+          color: "#1d4ed8",
+          weight: 1,
+        }),
+      onEachFeature: (feature, layer) => {
+        const name =
+          (feature.properties as Record<string, string>)?.P11_001 ?? "";
+        layer.on("mouseover", (e: L.LeafletMouseEvent) => {
+          tooltip.setContent(name).setLatLng(e.latlng).addTo(map);
+        });
+        layer.on("mouseout", () => {
+          tooltip.remove();
+        });
+      },
+    });
+
+    layerRef.current = geoLayer;
+    geoLayer.addTo(map);
+
+    return () => {
+      geoLayer.remove();
+      tooltip.remove();
+      layerRef.current = null;
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, data]);
+
+  return null;
+}
+// -----------------------------------------------------------------------
+
 export default function NagasakiMap() {
   const [cityBoundary, setCityBoundary] = useState<GeoJsonObject | null>(null);
   const [supermarkets, setSupermarkets] = useState<SupermarketElement[]>([]);
   const [retailStores, setRetailStores] = useState<RetailStore[]>([]);
   const [supermarketMode, setSupermarketMode] = useState<"osm" | "retail">("osm");
   const [townsGeoJSON, setTownsGeoJSON] = useState<GeoJsonObject | null>(null);
-  const [populationVisible, setPopulationVisible] = useState(true);
+  const [townViewMode, setTownViewMode] = useState<"none" | "population" | "aging_rate">("population");
+  const [busStopsGeoJSON, setBusStopsGeoJSON] = useState<FeatureCollection | null>(null);
 
   useEffect(() => {
     // 市境界GeoJSONの読み込み
@@ -239,6 +320,12 @@ export default function NagasakiMap() {
     fetch(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/towns-voronoi.geojson`)
       .then((r) => r.json())
       .then(setTownsGeoJSON)
+      .catch(console.error);
+
+    // バス停 GeoJSON の読み込み（長崎市内のみ）
+    fetch(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/bus-stops-nagasaki.geojson`)
+      .then((r) => r.json())
+      .then(setBusStopsGeoJSON)
       .catch(console.error);
   }, []);
 
@@ -305,19 +392,34 @@ export default function NagasakiMap() {
         </button>
         <div style={{ width: "1px", background: "#e5e7eb", margin: "2px 4px" }} />
         <button
-          onClick={() => setPopulationVisible((v) => !v)}
+          onClick={() => setTownViewMode((v) => v === "population" ? "none" : "population")}
           style={{
             padding: "6px 14px",
             borderRadius: "6px",
             border: "2px solid #10b981",
-            background: populationVisible ? "#10b981" : "white",
-            color: populationVisible ? "white" : "#10b981",
+            background: townViewMode === "population" ? "#10b981" : "white",
+            color: townViewMode === "population" ? "white" : "#10b981",
             fontWeight: "bold",
             cursor: "pointer",
             fontSize: "13px",
           }}
         >
           65歳以上人口
+        </button>
+        <button
+          onClick={() => setTownViewMode((v) => v === "aging_rate" ? "none" : "aging_rate")}
+          style={{
+            padding: "6px 14px",
+            borderRadius: "6px",
+            border: "2px solid #b45309",
+            background: townViewMode === "aging_rate" ? "#b45309" : "white",
+            color: townViewMode === "aging_rate" ? "white" : "#b45309",
+            fontWeight: "bold",
+            cursor: "pointer",
+            fontSize: "13px",
+          }}
+        >
+          高齢化率
         </button>
       </div>
 
@@ -444,13 +546,23 @@ export default function NagasakiMap() {
                 ))}
           </>
         </Overlay>
+        {/* バス停 */}
+        <Overlay checked name="バス停">
+          <>
+          </>
+        </Overlay>
       </LayersControl>
 
-      <MapLegend />
+      <MapLegend mode={townViewMode} />
       {/* 町輪郭レイヤー（MapContainer 内で useMap を使うためここに配置） */}
       {townsGeoJSON && (
-        <TownLayer data={townsGeoJSON} visible={populationVisible} />
+        <TownLayer
+          data={townsGeoJSON}
+          visible={townViewMode !== "none"}
+          colorMode={townViewMode === "none" ? "population" : townViewMode}
+        />
       )}
+      <BusStopLayer data={busStopsGeoJSON} />
     </MapContainer>
     </div>
   );
