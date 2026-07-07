@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -116,6 +116,11 @@ function MapPanes() {
       const busStopPane = map.createPane("busStopPane");
       busStopPane.style.zIndex = "640";
       busStopPane.style.pointerEvents = "auto";
+    }
+    if (!map.getPane("deliveryPane")) {
+      const deliveryPane = map.createPane("deliveryPane");
+      deliveryPane.style.zIndex = "435";
+      deliveryPane.style.pointerEvents = "auto";
     }
 
     const tooltipPane = map.getPane("tooltipPane");
@@ -236,11 +241,108 @@ function TownLayer({
 }
 // -----------------------------------------------------------------------
 
+// ---- 配達エリアレイヤー ----
+const DELIVERY_SERVICE_COLORS: Record<string, string> = {
+  "移動販売": "#f97316",
+  "宅配":   "#92400e",
+  "ネットスーパー": "#10b981",
+  "送迎":   "#8b5cf6",
+};
+
+function DeliveryLayer({
+  data,
+  visible,
+}: {
+  data: FeatureCollection | null;
+  visible: boolean;
+}) {
+  const map = useMap();
+  const layerRef = useRef<L.GeoJSON | null>(null);
+
+  useEffect(() => {
+    if (!data) return;
+
+    const popup = L.popup();
+
+    const geoLayer = L.geoJSON(data as GeoJsonObject, {
+      pane: "deliveryPane",
+      style: (feature) => {
+        const svc = (feature?.properties as Record<string, string>)?.service_type ?? "";
+        const color = DELIVERY_SERVICE_COLORS[svc] ?? "#6b7280";
+        return {
+          fillColor: color,
+          fillOpacity: 0.2,
+          color: color,
+          weight: 2,
+          dashArray: "4 3",
+        };
+      },
+      onEachFeature: (feature, layer) => {
+        const props = feature.properties as {
+          store_name: string;
+          service_type: string;
+          products: string;
+          town_count: number;
+        };
+        const color = DELIVERY_SERVICE_COLORS[props.service_type] ?? "#6b7280";
+
+        layer.on("mouseover", () => {
+          (layer as L.Path).setStyle({ fillOpacity: 0.45, weight: 3 });
+        });
+        layer.on("mouseout", () => {
+          (layer as L.Path).setStyle({
+            fillColor: color,
+            fillOpacity: 0.2,
+            color: color,
+            weight: 2,
+          });
+        });
+        layer.on("click", (e: L.LeafletMouseEvent) => {
+          popup
+            .setLatLng(e.latlng)
+            .setContent(
+              `<strong style="font-size:13px">${props.store_name}</strong><br/>` +
+              `<span style="font-size:12px">サービス: ${props.service_type}</span><br/>` +
+              `<span style="font-size:12px">取扱品: ${props.products}</span><br/>` +
+              `<span style="font-size:12px; color:#6b7280">対応 ${props.town_count} 町</span>`
+            )
+            .openOn(map);
+        });
+      },
+    });
+
+    layerRef.current = geoLayer;
+    if (visible) geoLayer.addTo(map);
+
+    return () => {
+      geoLayer.remove();
+      popup.remove();
+      layerRef.current = null;
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, data]);
+
+  useEffect(() => {
+    const layer = layerRef.current;
+    if (!layer) return;
+    if (visible) {
+      layer.addTo(map);
+    } else {
+      layer.remove();
+    }
+  }, [map, visible]);
+
+  return null;
+}
+// -----------------------------------------------------------------------
+
 // ---- バス停レイヤー（GeoJSON を Leaflet で直接描画）----
 function BusStopLayer({
   data,
+  visible,
 }: {
   data: FeatureCollection | null;
+  visible: boolean;
 }) {
   const map = useMap();
   const layerRef = useRef<L.GeoJSON | null>(null);
@@ -274,7 +376,7 @@ function BusStopLayer({
     });
 
     layerRef.current = geoLayer;
-    geoLayer.addTo(map);
+    if (visible) geoLayer.addTo(map);
 
     return () => {
       geoLayer.remove();
@@ -283,6 +385,16 @@ function BusStopLayer({
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, data]);
+
+  useEffect(() => {
+    const layer = layerRef.current;
+    if (!layer) return;
+    if (visible) {
+      layer.addTo(map);
+    } else {
+      layer.remove();
+    }
+  }, [map, visible]);
 
   return null;
 }
@@ -296,6 +408,21 @@ export default function NagasakiMap() {
   const [townsGeoJSON, setTownsGeoJSON] = useState<GeoJsonObject | null>(null);
   const [townViewMode, setTownViewMode] = useState<"none" | "population" | "aging_rate">("population");
   const [busStopsGeoJSON, setBusStopsGeoJSON] = useState<FeatureCollection | null>(null);
+  const [deliveryGeoJSON, setDeliveryGeoJSON] = useState<FeatureCollection | null>(null);
+  const [showBusStops, setShowBusStops] = useState(true);
+  const [showDelivery, setShowDelivery] = useState(false);
+  const [showDeliveryAll, setShowDeliveryAll] = useState(false);
+
+  // town_count < 488: エリア限定、=== 488: 市内全域
+  const deliveryAreaGeoJSON = useMemo<FeatureCollection | null>(() => {
+    if (!deliveryGeoJSON) return null;
+    return { ...deliveryGeoJSON, features: deliveryGeoJSON.features.filter((f) => (f.properties?.town_count ?? 0) < 488) };
+  }, [deliveryGeoJSON]);
+
+  const deliveryCityWideGeoJSON = useMemo<FeatureCollection | null>(() => {
+    if (!deliveryGeoJSON) return null;
+    return { ...deliveryGeoJSON, features: deliveryGeoJSON.features.filter((f) => (f.properties?.town_count ?? 0) === 488) };
+  }, [deliveryGeoJSON]);
 
   useEffect(() => {
     // 市境界GeoJSONの読み込み
@@ -326,6 +453,12 @@ export default function NagasakiMap() {
     fetch(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/bus-stops-nagasaki.geojson`)
       .then((r) => r.json())
       .then(setBusStopsGeoJSON)
+      .catch(console.error);
+
+    // 配達エリア GeoJSON の読み込み
+    fetch(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/delivery.geojson`)
+      .then((r) => r.json())
+      .then(setDeliveryGeoJSON)
       .catch(console.error);
   }, []);
 
@@ -420,6 +553,53 @@ export default function NagasakiMap() {
           }}
         >
           高齢化率
+        </button>
+        <div style={{ width: "1px", background: "#e5e7eb", margin: "2px 4px" }} />
+        <button
+          onClick={() => setShowBusStops((v) => !v)}
+          style={{
+            padding: "6px 14px",
+            borderRadius: "6px",
+            border: "2px solid #3b82f6",
+            background: showBusStops ? "#3b82f6" : "white",
+            color: showBusStops ? "white" : "#3b82f6",
+            fontWeight: "bold",
+            cursor: "pointer",
+            fontSize: "13px",
+          }}
+        >
+          🚌 バス停
+        </button>
+        <div style={{ width: "1px", background: "#e5e7eb", margin: "2px 4px" }} />
+        <button
+          onClick={() => setShowDelivery((v) => !v)}
+          style={{
+            padding: "6px 14px",
+            borderRadius: "6px",
+            border: "2px solid #f97316",
+            background: showDelivery ? "#f97316" : "white",
+            color: showDelivery ? "white" : "#f97316",
+            fontWeight: "bold",
+            cursor: "pointer",
+            fontSize: "13px",
+          }}
+        >
+          🚚 移動販売＆宅配
+        </button>
+        <button
+          onClick={() => setShowDeliveryAll((v) => !v)}
+          style={{
+            padding: "6px 14px",
+            borderRadius: "6px",
+            border: "2px solid #6b7280",
+            background: showDeliveryAll ? "#6b7280" : "white",
+            color: showDeliveryAll ? "white" : "#6b7280",
+            fontWeight: "bold",
+            cursor: "pointer",
+            fontSize: "13px",
+          }}
+        >
+          🌐 市内全域サービス
         </button>
       </div>
 
@@ -562,7 +742,9 @@ export default function NagasakiMap() {
           colorMode={townViewMode === "none" ? "population" : townViewMode}
         />
       )}
-      <BusStopLayer data={busStopsGeoJSON} />
+      <BusStopLayer data={busStopsGeoJSON} visible={showBusStops} />
+      <DeliveryLayer data={deliveryAreaGeoJSON} visible={showDelivery} />
+      <DeliveryLayer data={deliveryCityWideGeoJSON} visible={showDeliveryAll} />
     </MapContainer>
     </div>
   );
